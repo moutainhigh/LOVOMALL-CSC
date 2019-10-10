@@ -88,20 +88,21 @@
             <optional>true</optional>
         </dependency>
         <!-- https://mvnrepository.com/artifact/com.alibaba/druid -->
-        <!-- 第三方数据源 -->
+        <!-- 第三方数据源
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
             <version>1.1.20</version>
         </dependency>
-
+        -->
+        <!-- webjars
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>jquery</artifactId>
             <version>3.4.1</version>
         </dependency>
+        -->
     </dependencies>
-
     <build>
         <plugins>
             <plugin>

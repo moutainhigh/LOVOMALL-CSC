@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: LovoMallCSC
+  profiles:
+    active: dev # 当前项目激活配置环境
+---
+spring:
+  # 开发环境
+  profiles: dev
+  # thymeleaf 配置
+  thymeleaf:
+    cache: false # 禁用模板引擎缓存
+    template-resolver-order: 0 # 模板引擎视图解析器优先级，数值越低优先级越高
+  # datasource 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver # 数据库驱动版本 com.mysql.jdbc.Driver 是旧版本驱动
+    url: 'jdbc:mysql://localhost:3306/lovomall-csc?characterEncoding=utf8
+    &serverTimeZone=UTC' # 数据库名统一为 lovomall-csc
+    password: 5780 # 修改为自己数据库密码
+    username: root # 修改为自己数据库账号
+  # jpa jpa配置
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL8Dialect # MySQL数据库方言
+    hibernate:
+      ddl-auto: update # MySQL数据库方言
+    database: mysql # 数据库
+# 日志格式
+logging:
+  pattern:
+    dateformat: MM-dd HH-mm
