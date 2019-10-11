@@ -25,8 +25,15 @@ spring:
     show-sql: true
     database-platform: org.hibernate.dialect.MySQL8Dialect # MySQL数据库方言
     hibernate:
-      ddl-auto: update # MySQL数据库方言
+      ddl-auto: update
     database: mysql # 数据库
+  mvc:
+    static-path-pattern: /**
+  http:
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true
 # 日志格式
 logging:
   pattern:

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+		<meta name="renderer" content="webkit">
+		<!--国产浏览器高速模式-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="穷在闹市" />
+		<!-- 作者 -->
+		<meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<title>穷在闹市出品</title>
+
+		<!-- 公共样式 开始 -->
+		<link rel="stylesheet" type="text/css" href="../../css/base.css">
+		<link rel="stylesheet" type="text/css" href="../../css/iconfont.css">
+		<script type="text/javascript" src="../../framework/jquery-1.11.3.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../layui/css/layui.css">
+		<script type="text/javascript" src="../../layui/layui.js"></script>
+		<!-- 滚动条插件 -->
+		<link rel="stylesheet" type="text/css" href="../../css/jquery.mCustomScrollbar.css">
+		<script src="../../framework/jquery-ui-1.10.4.min.js"></script>
+		<script src="../../framework/jquery.mousewheel.min.js"></script>
+		<script src="../../framework/jquery.mCustomScrollbar.min.js"></script>
+		<script src="../js/supplier.js"></script><!-- 仅供所有子页面使用 -->
+		<!-- 公共样式 结束 -->
+
+	</head>
+
+	<body>
+		<div class="cBody">
+			<div class="console">
+
+
+				<script>
+					layui.use('form', function() {
+						var form = layui.form;
+				
+						//监听提交
+						form.on('submit(formDemo)', function(data) {
+							layer.msg(JSON.stringify(data.field));
+							return false;
+						});
+					});
+				</script>
+			</div>
+			
+			<table class="layui-table">
+				<thead>
+					<tr>
+						<th>商品编号</th>
+						<th>商品名</th>
+						<th>商品类型</th>
+						<th>采购数量</th>
+						<th>商品规格</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>龙九山</td>
+						<td>DLS201802281450280741</td>
+						<td>无锡市</td>
+						<td>龙九山</td>
+
+						<td>028-6666666</td>
+						<td>
+							<button class="layui-btn  layui-btn-sm" onclick="two()">审核</button>
+
+						</td>
+					</tr>
+					<tr>
+						<td>龙九山</td>
+						<td>DLS201802281450280741</td>
+						<td>无锡市</td>
+						<td>龙九山</td>
+
+						<td>028-6666666</td>
+
+						<td>
+							<button class="layui-btn  layui-btn-sm" onclick="two()">审核</button>
+						</td>
+					</tr>
+					<tr>
+						<td>龙九山</td>
+						<td>DLS201802281450280741</td>
+						<td>无锡市</td>
+						<td>龙九山</td>
+						<td>028-6666666</td>
+
+						<td>
+							<button class="layui-btn  layui-btn-sm" onclick="two()">审核</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- layUI 分页模块 -->
+			<div id="pages"></div>
+			<script>
+				layui.use(['laypage', 'layer'], function() {
+					var laypage = layui.laypage,
+							layer = layui.layer;
+
+					//总页数大于页码总数
+					laypage.render({
+						elem: 'pages'
+						,count: 100
+						,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
+						,jump: function(obj){
+							console.log(obj)
+						}
+					});
+				});
+			</script>
+			</div>
+		<div id="findDiv" style="display: none;width: 770px;height: 430px">
+
+			<table class="layui-table">
+				<thead>
+				<tr>
+					<th>供应商名称</th>
+					<th>经营范围</th>
+					<th>联系方式</th>
+					<th>供应商地址</th>
+					<th>供应商注册时间</th>
+					<th>供应商资质证书</th>
+					<th>操作</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>龙九山</td>
+					<td>DLS201802281450280741</td>
+					<td>无锡市</td>
+					<td>龙九山</td>
+
+					<td>028-6666666</td>
+					<td><a class="layui-btn  layui-btn-sm" href="../../images/goodsPIC1.png">查看</a></td>
+					<td>
+						<button class="layui-btn  layui-btn-sm" onclick="layer.closeAll()">发布</button>
+
+					</td>
+				</tr>
+				<tr>
+					<td>龙九山</td>
+					<td>DLS201802281450280741</td>
+					<td>无锡市</td>
+					<td>龙九山</td>
+
+					<td>028-6666666</td>
+					<td><a class="layui-btn  layui-btn-sm" href="../../images/goodsPIC1.png">查看</a></td>
+					<td>
+						<button class="layui-btn  layui-btn-sm" onclick="layer.closeAll()">发布</button>
+					</td>
+				</tr>
+				<tr>
+					<td>龙九山</td>
+					<td>DLS201802281450280741</td>
+					<td>无锡市</td>
+					<td>龙九山</td>
+					<td>028-6666666</td>
+					<td><a  class="layui-btn  layui-btn-sm" href="../../images/goodsPIC1.png">查看</a></td>
+					<td>
+						<button class="layui-btn  layui-btn-sm" onclick="layer.closeAll()">发布</button>
+					</td>
+				</tr>
+
+				</tbody>
+			</table>
+
+		</div>
+
+		<div id="findDiv1" style="display: none">
+			<div style="height: 200px">
+				<div style="margin-left: 10px">
+					<h1>审核意见：</h1>
+				</div>
+
+				<div style="margin-left: 10px">
+					<textarea style="height: 150px;width: 580px;">
+				</textarea>
+				</div>
+			</div>
+
+			<div style="float: left;margin-left: 30px">
+				审核人:  <input type="text"><br>
+				<span>审核时间：</span>2019-10-9
+			</div>
+			<div style="float: left;margin-left: 100px;margin-top: 10px">
+				<!--layer.closeAll()关闭所有弹出层-->
+				<div style="text-align: center">
+					<!--layer.closeAll()关闭所有弹出层-->
+					<a href="javascript:layer.closeAll()" class="layui-btn layui-btn-danger" style="margin-top: 50px;margin-left: 10px"><i class="layui-icon"></i>审核不通过</a>
+					<a href="javascript:one()" class="layui-btn" style="margin-top: 50px;text-align: center"><i class="layui-icon"></i>审核通过</a>
+				</div>
+			</div>
+
+		</div>
+
+
+
+
+	</body>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+    <!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+    <meta name="renderer" content="webkit">
+    <!--国产浏览器高速模式-->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- 公共样式 开始 -->
+    <link rel="stylesheet" type="text/css" href="../../css/base.css">
+    <link rel="stylesheet" type="text/css" href="../../css/iconfont.css">
+    <script type="text/javascript" src="../../framework/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../layui/css/layui.css">
+    <script type="text/javascript" src="../../layui/layui.js"></script>
+    <!-- 滚动条插件 -->
+    <link rel="stylesheet" type="text/css" href="../../css/jquery.mCustomScrollbar.css">
+    <script src="../../framework/jquery-ui-1.10.4.min.js"></script>
+    <script src="../../framework/jquery.mousewheel.min.js"></script>
+    <script src="../../framework/jquery.mCustomScrollbar.min.js"></script>
+    <!--<script src="../../framework/cframe.js"></script>&lt;!&ndash; 仅供所有子页面使用 &ndash;&gt;-->
+    <!-- 公共样式 结束 -->
+
+
+    <script src="../js/userStatusAuitd.js"></script>
+
+</head>
+<body>
+<div class="cBody">
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>用户id</th>
+            <th>用户名</th>
+            <th>请求</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th>xxx</th>
+            <th>xxxx</th>
+            <th>xxx</th>
+            <th><a href="javascript:showStatus()" class="layui-btn"><i class="layui-icon layui-icon-search"></i>审核</a>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- layUI 分页模块 -->
+    <div id="pages"></div>
+
+    <div id="qrDiv" style="display:none;text-align: center">
+        <div style="text-align: center">
+            <a href="javascript:layer.closeAll()" class="layui-btn"><i class="layui-icon layui-icon-On-line"></i>通过</a>
+            <a href="javascript:showMessage()" class="layui-btn"><i class="layui-icon layui-icon-cuo"></i>不通过</a>
+        </div>
+    </div>
+
+    <div id="messageDiv" style="display:none;text-align: center">
+        <div class="layui-form-item layui-form-text" style="text-align: center">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block">
+                <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div style="text-align: center">
+            <a href="javascript:layer.closeAll()" class="layui-btn"><i class="layui-icon layui-icon-ok"></i>确定</a>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

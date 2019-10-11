@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+		<meta name="renderer" content="webkit">
+		<!--国产浏览器高速模式-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="穷在闹市" />
+		<!-- 作者 -->
+		<meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<title>穷在闹市出品</title>
+
+		<!-- 公共样式 开始 -->
+		<link rel="stylesheet" type="text/css" href="../../css/base.css">
+		<link rel="stylesheet" type="text/css" href="../../css/iconfont.css">
+		<script type="text/javascript" src="../../framework/jquery-1.11.3.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../layui/css/layui.css">
+		<script type="text/javascript" src="../../layui/layui.js"></script>
+		<!-- 滚动条插件 -->
+		<link rel="stylesheet" type="text/css" href="../../css/jquery.mCustomScrollbar.css">
+		<script src="../../framework/jquery-ui-1.10.4.min.js"></script>
+		<script src="../../framework/jquery.mousewheel.min.js"></script>
+		<script src="../../framework/jquery.mCustomScrollbar.min.js"></script>
+		<script src="../../framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
+		<!-- 公共样式 结束 -->
+		
+		<style>
+		</style>
+	</head>
+
+	<body>
+		<div class="cBody">
+			<div class="console">
+				<div class="layui-form-item">
+					<a class="layui-btn" onclick="addDiscountList('customList')">新增</a>
+				</div>
+			</div>
+			
+			<table id="discountList" class="layui-table">
+				<thead>
+					<tr>
+						<th>折扣等级</th>
+						<th>最小累计金额</th>
+						<th>最大累计金额</th>
+						<th>折扣率</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>一级</td>
+						<td>500</td>
+						<td>1000</td>
+						<td>0.9</td>
+						<td>
+							<a class="layui-btn" onclick="delDiscountList(this)">删除</a>
+							<a class="layui-btn" onclick="updateDiscountList(this)">修改</a>
+						</td>
+					</tr>
+					<tr>
+						<td>一级</td>
+						<td>500</td>
+						<td>1000</td>
+						<td>0.9</td>
+						<td>
+							<a class="layui-btn" onclick="delDiscountList(this)">删除</a>
+							<a class="layui-btn" onclick="updateDiscountList(this)">修改</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<script>
+
+			//新增
+			function addCustomList(id){
+
+			}
+			
+			//删除
+			function delDiscountList(_this){
+				layui.use(['form','laydate'], function() {
+					layer.confirm('确定要删除么？', {
+						btn: ['确定', '取消'] //按钮
+					}, function() {
+						$(_this).parent().parent().remove();
+						layer.msg('删除成功', {
+							icon: 1
+						});
+					}, function() {
+						layer.msg('取消删除', {
+							time: 2000 //20s后自动关闭
+						});
+					});
+				});
+			}
+
+		</script>
+	</body>
+
+</html>

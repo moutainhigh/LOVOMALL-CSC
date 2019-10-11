@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrome=1">
+		<!-- Google Chrome Frame也可以让IE用上Chrome的引擎: -->
+		<meta name="renderer" content="webkit">
+		<!--国产浏览器高速模式-->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="穷在闹市" />
+		<!-- 作者 -->
+		<meta name="revised" content="穷在闹市.v3, 2019/05/01" />
+		<!-- 定义页面的最新版本 -->
+		<meta name="description" content="网站简介" />
+		<!-- 网站简介 -->
+		<meta name="keywords" content="搜索关键字，以半角英文逗号隔开" />
+		<title>穷在闹市出品</title>
+
+		<!-- 公共样式 开始 -->
+		<link rel="stylesheet" type="text/css" href="../../css/base.css">
+		<link rel="stylesheet" type="text/css" href="../../css/iconfont.css">
+		<script type="text/javascript" src="../../framework/jquery-1.11.3.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../layui/css/layui.css">
+		<script type="text/javascript" src="../../layui/layui.js"></script>
+		<!-- 滚动条插件 -->
+		<link rel="stylesheet" type="text/css" href="../../css/jquery.mCustomScrollbar.css">
+		<script src="../../framework/jquery-ui-1.10.4.min.js"></script>
+		<script src="../../framework/jquery.mousewheel.min.js"></script>
+		<script src="../../framework/jquery.mCustomScrollbar.min.js"></script>
+		<script src="../js/supplerRefuend.js"></script><!-- 仅供所有子页面使用 -->
+		<!-- 公共样式 结束 -->
+
+	</head>
+
+	<body>
+		<div class="cBody">
+			<div class="console">
+
+
+				<script>
+					layui.use('form', function() {
+						var form = layui.form;
+				
+						//监听提交
+						form.on('submit(formDemo)', function(data) {
+							layer.msg(JSON.stringify(data.field));
+							return false;
+						});
+					});
+				</script>
+			</div>
+			
+			<table class="layui-table">
+				<thead>
+					<tr>
+						<th>退货单编号</th>
+						<th>供应商名称</th>
+						<th>商品数量</th>
+						<th>退货总价</th>
+						<th>收款时间</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>
+                            <button class="layui-btn " onclick="show()" >审核</button>
+                            <button class="layui-btn " onclick="showTwo()">基本信息</button>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>
+                            <button class="layui-btn " onclick="show()" >审核</button>
+                            <button class="layui-btn " onclick="showTwo()">基本信息</button>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td>
+                            <button class="layui-btn " onclick="show()" >审核</button>
+                            <button class="layui-btn " onclick="showTwo()">基本信息</button>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+            <div id="addDiv" style="display: none">
+                <h1 style="margin-left: 20px;margin-top: 30px">审核供应商退货</h1>
+                <!--layer.closeAll()关闭所有层-->
+                <form id="addForm" class="layui-form" >
+                    <!--<input type="hidden" id="id" name="id">  -->
+                    <a href="javascript:dang()" class="layui-btn layui-btn" >
+                        <i class="layui-icon layui-icon-add-circle" ></i>同意</a>
+                    <a href="javascript:san()" class="layui-btn layui-btn" >
+                        <i class="layui-icon layui-icon-add-circle" ></i>拒绝</a>
+                </form>
+            </div>
+
+            <div id="sanDiv" style="display: none">
+				<h1 style="margin-left: 100px;margin-top: 30px">审核意见</h1>
+				<!--layer.closeAll()关闭所有层-->
+				<form id="sanForm" class="layui-form" >
+					<!--<input type="hidden" id="id" name="id">  -->
+					<textarea style="margin-left: 30px;" name="info" cols="30" rows="8" placeholder="请输入"
+					></textarea><p>
+					<a  style="margin-left: 100px;margin-top: 80px"href="javascript:dang()" class="layui-btn layui-btn" >
+						<i class="layui-icon layui-icon-add-circle" ></i>提交</a>
+                </form>
+            </div>
+
+            <div id="queryDiv" style="display: none">
+                <h1 style="margin-left: 100px;margin-top: 30px">供应商退货详情</h1>
+                <table class="layui-table">
+                    <thead>
+                    <tr>
+                        <th>消息生成时间</th>
+                        <th>消息内容</th>
+                        <th>消息发送方</th>
+
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+
+                    </tr>
+                    <tbody>
+                    </tbody>
+                </table>
+
+                <a href="javascript:dang()" class="layui-btn" style="margin-left: 200px">
+                    <i class="layui-icon layui-icon-add-circle-fine"></i>确定</a>
+
+            </div>
+
+
+
+
+			<!-- layUI 分页模块 -->
+			<!--<div id="pages"></div>-->
+			<!--<script>-->
+				<!--layui.use(['laypage', 'layer'], function() {-->
+					<!--var laypage = layui.laypage,-->
+						<!--layer = layui.layer;-->
+				<!---->
+					<!--//总页数大于页码总数-->
+					<!--laypage.render({-->
+					    <!--elem: 'pages'-->
+					    <!--,count: 100-->
+					    <!--,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']-->
+					    <!--,jump: function(obj){-->
+					      <!--console.log(obj)-->
+					    <!--}-->
+					<!--});-->
+				<!--});-->
+			<!--</script>-->
+		</div>
+	</body>
+
+</html>
