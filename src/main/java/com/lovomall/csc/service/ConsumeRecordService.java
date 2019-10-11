@@ -1,8 +1,7 @@
 package com.lovomall.csc.service;
 
 import com.lovomall.csc.entity.ConsumeRecord;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  * Author:     cafebabe
@@ -26,7 +25,7 @@ public interface ConsumeRecordService {
      * @param orderStatus 审核状态
      * @return 符合条件的消费记录对象集合
      */
-    List<ConsumeRecord> findAllByOrderStatusIs(int pageNO, int pageSize, String orderStatus);
+    Page<ConsumeRecord> findAllByOrderStatusIs(int pageNO, int pageSize, String orderStatus);
 
     /**
      * 按充值记录Id 更新审核状态

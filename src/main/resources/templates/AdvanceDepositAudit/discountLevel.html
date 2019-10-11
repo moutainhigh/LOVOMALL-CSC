@@ -52,37 +52,31 @@
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>一级</td>
-						<td>500</td>
-						<td>1000</td>
-						<td>0.9</td>
-						<td>
-							<a class="layui-btn" onclick="delDiscountList(this)">删除</a>
-							<a class="layui-btn" onclick="updateDiscountList(this)">修改</a>
-						</td>
-					</tr>
-					<tr>
-						<td>一级</td>
-						<td>500</td>
-						<td>1000</td>
-						<td>0.9</td>
-						<td>
-							<a class="layui-btn" onclick="delDiscountList(this)">删除</a>
-							<a class="layui-btn" onclick="updateDiscountList(this)">修改</a>
-						</td>
-					</tr>
+				<tbody id="dataBody">
 				</tbody>
 			</table>
 		</div>
+
 		<script>
+			// 初始化加载
+			$(function () {
+				$.post( "/discount/all",
+						null,
+						function (info) {
+							var str = " ";
+							for (var i = 0; i < info.list.length; i++) {
+								var discount = info.list[i];
+								str += "<tr><td>" + discount.discountLevel +"</td>" +
+										"<td>" + discount.minMoney +"</td>" +
+										"<td>" + discount.maxMoney +"</td>" +
+										"<td>" + discount.discountPer +"</td>" +
+										"<td><a class='layui-btn' href=''>修改</a><a class='layui-btn' onclick='delDiscountList(this)'>删除</a></td></tr>";
+							}
+							$("#dataBody").html(str);
+						}
+				);
+			});
 
-			//新增
-			function addCustomList(id){
-
-			}
-			
 			//删除
 			function delDiscountList(_this){
 				layui.use(['form','laydate'], function() {

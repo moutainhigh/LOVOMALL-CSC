@@ -61,7 +61,6 @@
 <body>
 <div class="cBody">
 	<div class="console">
-
 		<script>
 			layui.use('form', function() {
 				var form = layui.form;
@@ -81,38 +80,7 @@
 			<th>充值记录ID</th><th>用户ID</th><th>充值金额</th><th>充值时间</th><th>审核状态</th><th>操作</th>
 		</tr>
 		</thead>
-		<tbody>
-		<tr>
-			<td>DLS201802281450</td>
-			<td>DLS201802281450280741</td>
-			<td>1000</td>
-			<td>2019-10-09</td>
-			<td>未审核</td>
-			<td>
-				<a class="layui-btn" href='javascript:infofind()'>审核</a>
-			</td>
-		</tr>
-		<tr>
-			<td>DLS201802281450</td>
-			<td>DLS201802281450280741</td>
-			<td>1000</td>
-			<td>2019-10-09</td>
-			<td>未审核</td>
-			<td>
-				<a class="layui-btn" href='javascript:infofind()'>审核</a>
-			</td>
-		</tr>
-		<tr>
-			<td>DLS201802281450</td>
-			<td>DLS201802281450280741</td>
-			<td>1000</td>
-			<td>2019-10-09</td>
-			<td>未审核</td>
-			<td>
-				<a class="layui-btn" href='javascript:infofind()'>审核</a>
-			</td>
-		</tr>
-		</tbody>
+		<tbody id="dataBody"></tbody>
 	</table>
 	<div id="info" style="display:none;text-align: center;padding-top: 30px">
 		<form id="reviewForm" class="layui-form" action="">
@@ -144,20 +112,46 @@
 	<!-- layUI 分页模块 -->
 	<div id="pages"></div>
 	<script>
-		layui.use(['laypage', 'layer'], function() {
-			var laypage = layui.laypage,
-					layer = layui.layer;
 
-			//总页数大于页码总数
-			laypage.render({
-				elem: 'pages'
-				,count: 100
-				,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
-				,jump: function(obj){
-					console.log(obj)
-				}
-			});
+		$(function () {
+			cutPage(1);
 		});
+
+		function cutPage(pageNO){
+			$.post("/recharge/page",
+					{
+						'pageNO':pageNO
+					},
+					function(info){
+						var str = "";
+						for(var i=0;i<info.data.length;i++){
+							var obj = info.data[i];
+							str += "<tr><td>"+obj.upId+"</td><td>"+obj.balance.userId+"</td><td>"+obj.amount+ "</td>" +
+									"<td>"+obj.upDate+"</td><td>"+obj.reviewStatus+"</td>" +
+									"<td><a class='layui-btn' href='javascript:infofind()'>审核</a></td></tr>";
+						}
+
+						$("#dataBody").html(str);
+
+						if(pageNO === 1){
+							layui.use('laypage', function(){
+								var laypage = layui.laypage;
+								//执行一个laypage实例
+								laypage.render({
+									elem: 'pages' //注意，这里的 test1 是 ID，不用加 # 号
+									,count: info.count, //数据总数，从服务端得到
+									limit:5,  //每页显示条数
+									jump:function(obj,first){ //页码变化时触发
+										if(!first){
+											cutPage(obj.curr);
+										}
+									}
+								});
+							});
+						}
+
+					});
+		}
 	</script>
 </div>
 

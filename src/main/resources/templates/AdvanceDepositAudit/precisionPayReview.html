@@ -59,7 +59,7 @@
 	</head>
 
 	<body>
-		<div class="cBody">
+	<div class="cBody">
 			<div class="console">
 
 
@@ -79,42 +79,10 @@
 			<table class="layui-table">
 				<thead>
 					<tr>
-						<th>订单编号</th><th>用户ID</th><th>订单号</th><th>总价</th><th>订单日期</th><th>订单状态</th><th>结算方式</th><th>操作</th>
+						<th>订单编号</th><th>用户ID</th><th>订单号</th><th>总价</th><th>订单日期</th><th>订单状态</th><th>操作</th>
 					</tr>
 				</thead>
-				<tbody>
-					
-					<tr>
-						<td>龙九山</td>
-						<td>DLS201802281450280741</td>
-						<td>无锡市</td>
-						<td>龙九山</td>
-						<td>龙九山</td>
-						<td>18600001111</td>
-						<td>微信</td>
-
-						<td>
-							<a class="layui-btn" href='javascript:infofindById()'>订单详情</a>
-							<a class="layui-btn" href='javascript:infofindId()'>审核</a>
-						</td>
-					</tr>
-					<tr>
-						<td>龙九山</td>
-						<td>DLS201802281450280741</td>
-						<td>无锡市</td>
-						<td>龙九山</td>
-						<td>龙九山</td>
-						<td>18600001111</td>
-						<td>微信</td>
-
-						<td>
-
-							<a class="layui-btn" href='javascript:infofindById()'>订单详情</a>
-							<a class="layui-btn" href='javascript:infofindId()'>审核</a>
-						</td>
-					</tr>
-
-				</tbody>
+				<tbody id="dataBody"></tbody>
 			</table>
 			<div id="infoDiv" style="display:none;">
 				<table class="layui-table">
@@ -171,23 +139,44 @@
 			<!-- layUI 分页模块 -->
 			<div id="pages"></div>
 			<script>
-				layui.use(['laypage', 'layer'], function() {
-					var laypage = layui.laypage,
-						layer = layui.layer;
-				
-					//总页数大于页码总数
-					laypage.render({
-					    elem: 'pages'
-					    ,count: 100
-					    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
-					    ,jump: function(obj){
-					      console.log(obj)
-					    }
-					});
+				$(function () {
+					cutPage(1);
 				});
+				function cutPage(pageNO){
+					$.post("/consume/page",
+							{
+								'pageNO':pageNO
+							},
+							function(info){
+								var str = " ";
+								for(var i=0;i<info.data.length;i++){
+									var obj = info.data[i];
+									str += "<tr><td>"+obj.consuId+"</td><td>"+obj.balance.userId+"</td><td>"+obj.orderId+ "</td>" +
+											"<td>"+obj.totalPrice+"</td><td>"+obj.orderDate+"</td><td>"+obj.orderStatus+"</td>" +
+											"<td><a class=\"layui-btn\" href='javascript:infofindById()'>订单详情</a>" +
+											"<a class=\"layui-btn\" href='javascript:infofindId()'>审核</a></td></tr>";
+								}
+								$("#dataBody").html(str);
+
+								if(pageNO === 1){
+									layui.use('laypage', function(){
+										var laypage = layui.laypage;
+										//执行一个laypage实例
+										laypage.render({
+											elem: 'pages' //注意，这里的 test1 是 ID，不用加 # 号
+											,count: info.count, //数据总数，从服务端得到
+											limit:5,  //每页显示条数
+											jump:function(obj,first){ //页码变化时触发
+												if(!first){
+													cutPage(obj.curr);
+												}
+											}
+										});
+									});
+								}
+							});
+				}
 			</script>
 		</div>
-
 	</body>
-
 </html>

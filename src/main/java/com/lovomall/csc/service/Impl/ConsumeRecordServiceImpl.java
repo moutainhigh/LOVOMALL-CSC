@@ -4,6 +4,7 @@ import com.lovomall.csc.entity.ConsumeRecord;
 import com.lovomall.csc.repository.ConsumeRecordRepository;
 import com.lovomall.csc.service.ConsumeRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,11 +34,10 @@ public class ConsumeRecordServiceImpl implements ConsumeRecordService {
     }
 
     @Override
-    public List<ConsumeRecord> findAllByOrderStatusIs(int pageNO, int pageSize, String orderStatus) {
+    public Page<ConsumeRecord> findAllByOrderStatusIs(int pageNO, int pageSize, String orderStatus) {
         Pageable pageable = PageRequest.of(pageNO, pageSize);
 
-        return consumeRecordRepository.findAllByOrderStatusIs(pageable,
-                orderStatus).getContent();
+        return consumeRecordRepository.findAllByOrderStatusIs(pageable, orderStatus);
     }
 
     @Transactional

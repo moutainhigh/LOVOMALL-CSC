@@ -11,23 +11,14 @@ import com.lovomall.csc.service.DiscountLevelService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.Query;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 @SpringBootTest
 class LovomallCscApplicationTests {
-
-    @Autowired(required = false)
-    private DiscountLevelService discountLevelService;
-
-
-    @Test
-    void discountLevel(){
-        discountLevelService.findAll().stream()
-                .map(DiscountLevel::getId)
-                .forEach(System.out::println);
-    }
 
 }

@@ -1,8 +1,7 @@
 package com.lovomall.csc.service;
 
 import com.lovomall.csc.entity.RechargeRecord;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 /**
  * Author:     cafebabe
@@ -26,7 +25,7 @@ public interface RechargeRecordService {
      * @param reviewStatus 审核状态
      * @return 符合条件的审核记录对象集合
      */
-    List<RechargeRecord> findAllByReviewStatusIs(int pageNO, int pageSize, String reviewStatus);
+    Page<RechargeRecord> findAllByReviewStatusIs(int pageNO, int pageSize, String reviewStatus);
 
     /**
      * 按充值记录Id 更新审核状态

@@ -4,6 +4,7 @@ import com.lovomall.csc.entity.RechargeRecord;
 import com.lovomall.csc.repository.RechargeRecordRepository;
 import com.lovomall.csc.service.RechargeRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,12 +35,11 @@ public class RechargeRecordServiceImpl implements RechargeRecordService {
     }
 
     @Override
-    public List<RechargeRecord> findAllByReviewStatusIs(int pageNO, int pageSize, String reviewStatus) {
+    public Page<RechargeRecord> findAllByReviewStatusIs(int pageNO, int pageSize, String reviewStatus) {
 
         Pageable pageable = PageRequest.of(pageNO, pageSize);
 
-        return rechargeRecordRepository.findAllByReviewStatusIs(pageable,
-                reviewStatus).getContent();
+        return rechargeRecordRepository.findAllByReviewStatusIs(pageable, reviewStatus);
     }
 
     @Transactional
