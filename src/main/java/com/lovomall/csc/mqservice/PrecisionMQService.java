@@ -12,7 +12,7 @@ import javax.jms.Queue;
  * Author:     cafebabe
  * Date:       2019/10/14 
  * Time:       下午2:02
- * Description: TODO
+ * Description: 预存款审核业务消息队列
  * Version: 1.0
  */
 @Service
