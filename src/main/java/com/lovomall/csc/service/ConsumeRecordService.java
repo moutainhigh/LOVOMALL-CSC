@@ -33,4 +33,11 @@ public interface ConsumeRecordService {
      * @param orderStatus 审核状态
      */
     void updateOrderStatusById(String consuId, String orderStatus);
+
+    /**
+     * 按消费记录id 查找消费记录对象
+     * @param consuId 消费记录id
+     * @return 消费记录对象
+     */
+    ConsumeRecord findByConsuIdIs(String consuId);
 }

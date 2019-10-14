@@ -31,51 +31,10 @@
 		<script src="../../framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
 
 		<!-- 公共样式 结束 -->
-		<script>
-			function infofindById(){
-				layer.open({
-					title:'订单详情',
-					type: 1,
-					shadeClose:true, //点击遮罩关闭
-					area: ['700px', '450px'], //宽高
-					anim: 2,                   //动画
-					content:$("#infoDiv"), //内容为frameDiv内容
-					offset:'auto'
-				});
-			}
-			function infofindId() {
-				layer.open({
-					title: '订单支付审核',
-					type: 1,
-					shadeClose: true, //点击遮罩关闭
-					area: ['500px', '450px'], //宽高
-					anim: 2,                   //动画
-					content: $("#info"), //内容为frameDiv内容
-					offset: 'auto'//设置div位置，默认居中
-				});
-			}
-		</script>
-
 	</head>
 
 	<body>
 	<div class="cBody">
-			<div class="console">
-
-
-				<script>
-					layui.use('form', function() {
-						var form = layui.form;
-				
-						//监听提交
-						form.on('submit(formDemo)', function(data) {
-							layer.msg(JSON.stringify(data.field));
-							return false;
-						});
-					});
-				</script>
-			</div>
-			
 			<table class="layui-table">
 				<thead>
 					<tr>
@@ -88,56 +47,43 @@
 				<table class="layui-table">
 				<thead>
 				<tr>
-					<th>订单明细ID</th>
-					<th>订单编号</th>
-					<th>商品名称</th>
-					<th>商品数量</th>
-					<th>商品单价</th>
-					<th>规格</th>
+					<th>订单明细ID</th><th>订单编号</th><th>商品名称</th><th>商品数量</th><th>商品单价</th><th>规格</th>
 				</tr>
 
 				</thead>
-					<tbody>
-					<tr>
-						<td>1</td>
-						<td>DLS201802281450280741</td>
-						<td>象拔蚌</td>
-						<td>100</td>
-						<td>25</td>
-						<td>12</td>
-					</tr>
+					<tbody id="infoData"></tbody>
 				</table>
 			</div>
-			<div id="info" style="display:none;text-align: center;padding-top: 30px">
-				<form id="reviewForm" class="layui-form" action="">
-					<div class="layui-form-item">
-					<label class="layui-form-label">折扣等级</label>
-					<div class="layui-input-inline shortInput">
-						<input type="text" name="disCountLevel" required lay-verify="required"  autocomplete="off" class="layui-input">
-					</div>
-					</div>
-
-					<div class="layui-form-item">
-					<label class="layui-form-label">实际金额</label>
-					<div class="layui-input-inline shortInput">
-						<input type="text" name="actualMoney" required lay-verify="required"  autocomplete="off" class="layui-input">
-					</div>
-					</div>
-
-					<label class="layui-form-label">审核意见：</label>
-					<div class="layui-input-block"style="width: 300px;margin: auto">
-						<textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
-					</div>
-					<div style="margin-top: 50px">
-						<a href='javascript:layer.closeAll()' class="layui-btn">通过</a>
-						<a href='javascript:layer.closeAll()' class="layui-btn">不通过</a>
-					</div>
-				</form>
+		<div id="reviewDiv" style="display: none">
+			<input id="consuId" type="hidden" name="consuId" value=""/><br/>
+			当前折扣等级:<input id="discountPer" name="discountPer" type="text" value="" readonly/><br>
+			实际金额:<input id="payMoney" name="payMoney" type="text" value="" readonly><br>
+			<div style="height: 200px">
+				<div style="margin-left: 10px">
+					<h1>审核意见：</h1>
+				</div>
+				<div style="margin-left: 10px">
+					<textarea id="reviewAdvice" name="reviewAdvice" style="height: 150px;width: 580px;">
+				</textarea>
+				</div>
 			</div>
 
-			
-			<!-- layUI 分页模块 -->
-			<div id="pages"></div>
+			<div style="float: left;margin-left: 30px">
+				审核人:  <input id="name" name="name" type="text"><br>
+			</div>
+			<div style="float: left;margin-left: 100px;margin-top: 10px">
+				<!--layer.closeAll()关闭所有弹出层-->
+				<div style="text-align: center">
+					<!--layer.closeAll()关闭所有弹出层-->
+					<a href="javascript:reviewFailed()" class="layui-btn layui-btn-danger" style="margin-top: 50px;margin-left: 10px"><i class="layui-icon"></i>不通过</a>
+					<a href="javascript:reviewPass()" class="layui-btn"
+					   style="margin-top: 50px;text-align: center"><i class="layui-icon"></i>通过</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- layUI 分页模块 -->
+		<div id="pages"></div>
 			<script>
 				$(function () {
 					cutPage(1);
@@ -153,8 +99,8 @@
 									var obj = info.data[i];
 									str += "<tr><td>"+obj.consuId+"</td><td>"+obj.balance.userId+"</td><td>"+obj.orderId+ "</td>" +
 											"<td>"+obj.totalPrice+"</td><td>"+obj.orderDate+"</td><td>"+obj.orderStatus+"</td>" +
-											"<td><a class=\"layui-btn\" href='javascript:infofindById()'>订单详情</a>" +
-											"<a class=\"layui-btn\" href='javascript:infofindId()'>审核</a></td></tr>";
+											"<td><a class='layui-btn'   onclick=\"orderInfo(\' "+obj.consuId + "\')\">订单详情</a>" +
+											"<a class='layui-btn' onclick=\"review(\'"+obj.consuId+"\')\">审核</a></td></tr>";
 								}
 								$("#dataBody").html(str);
 
@@ -175,6 +121,71 @@
 									});
 								}
 							});
+				}
+
+				function orderInfo(id){
+					layer.open({
+						title:'订单详情',
+						type: 1,
+						shadeClose:true, //点击遮罩关闭
+						area: ['700px', '450px'], //宽高
+						anim: 2,                   //动画
+						content:$("#infoDiv"), //内容为frameDiv内容
+						offset:'auto'
+					});
+				}
+
+				function review(id) {
+					layer.open({
+						type:1,
+						title:'预存款支付审核',
+						skin:'layui-layer-rim',//是否加边框
+						area:['600px','500px'],//弹出层大小
+						anim:2,//动画
+						content:$("#reviewDiv")//需要显示的div
+					});
+					$("#consuId").val(id);
+					discountPer(id);
+				}
+
+				function discountPer(id) {
+					$.post( "/consume/discountPer",
+							{
+								'consuId': id
+							},
+							function (info) {
+								$("#discountPer").val(info.discountPer);
+								$("#payMoney").val(info.payMoney);
+							}
+					);
+				}
+
+				function reviewPass() {
+					$.post( "/consume/reviewPass",
+							{
+								'consuId': $("#consuId").val(),
+								'discountPer': $("#discountPer").val(),
+								'payMoney': $("#payMoney").val(),
+								'name': $("#name").val()
+							},
+							function (info) {
+								layer.closeAll();
+								cutPage(1);
+							}
+					);
+				}
+
+				function reviewFailed() {
+					$.post( "/consume/reviewFailed",
+							{
+								'consuId': $("#consuId").val(),
+								'reviewAdvice': $("#reviewAdvice").val(),
+								'name': $("#name").val()
+							},
+							function (info) {
+								layer.closeAll();
+							}
+					);
 				}
 			</script>
 		</div>

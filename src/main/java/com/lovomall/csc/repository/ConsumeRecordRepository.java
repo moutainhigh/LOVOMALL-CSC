@@ -40,4 +40,11 @@ public interface ConsumeRecordRepository extends Repository<ConsumeRecord, Strin
     @Query (value = "update ConsumeRecord set orderStatus=:orderStatus " +
             "where consuId=:consuId")
     void updateOrderStatusById(String consuId, String orderStatus);
+
+    /**
+     * 按消费记录id 查找消费记录对象
+     * @param consuId 消费记录id
+     * @return 消费记录对象
+     */
+    ConsumeRecord findByConsuIdIs(String consuId);
 }

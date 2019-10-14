@@ -53,4 +53,8 @@ public interface DiscountLevelRepository extends Repository<DiscountLevel, Strin
             "id=:id")
     void updateMoneyRange(String id, double minMoney, double maxMoney);
 
+    @Query("select discountPer from DiscountLevel where maxMoney >= :accuMoney" +
+            " and minMoney <= :accuMoney")
+    double findDiscountPerByAccuMoney(double accuMoney);
+
 }

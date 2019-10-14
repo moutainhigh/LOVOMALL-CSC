@@ -1,6 +1,7 @@
 package com.lovomall.csc.controller;
 
 import com.lovomall.csc.entity.RechargeRecord;
+import com.lovomall.csc.entity.RechargeReviewRecord;
 import com.lovomall.csc.service.BalanceService;
 import com.lovomall.csc.service.RechargeRecordService;
 import com.lovomall.csc.service.RechargeReviewRecordService;
@@ -49,4 +50,38 @@ public class RechargeRecordController {
         map.put("count", (int)page.getTotalElements());
         return map;
     }
+
+
+    @RequestMapping(path = "/reviewPass")
+    @ResponseBody
+    public void reviewPass(String upId, String name){
+        // 更新审核状态
+        rechargeRecordService.updateReviewStatusById(upId, "已审核");
+
+        // 添加审核记录
+        RechargeRecord rechargeRecord = rechargeRecordService.findByUpIdIs(upId);
+        RechargeReviewRecord reviewRecord = new RechargeReviewRecord();
+        reviewRecord.setName(name);
+        reviewRecord.setReviewResult("通过");
+        reviewRecord.setRechargeRecord(rechargeRecord);
+        rechargeReviewRecordService.save(reviewRecord);
+
+        // 更新余额及累计充值金额
+        balanceService.updateAccumulate(rechargeRecord.getBalance().getUserId(),
+                rechargeRecord.getAmount());
+    }
+
+    @RequestMapping(path = "/reviewFailed")
+    @ResponseBody
+    public void reviewFailed(String upId, String name, String reviewAdvice){
+        // 添加审核记录
+        RechargeRecord rechargeRecord = rechargeRecordService.findByUpIdIs(upId);
+        RechargeReviewRecord reviewRecord = new RechargeReviewRecord();
+        reviewRecord.setName(name);
+        reviewRecord.setReviewResult("未通过");
+        reviewRecord.setReviewAdvice(reviewAdvice);
+        reviewRecord.setRechargeRecord(rechargeRecord);
+        rechargeReviewRecordService.save(reviewRecord);
+    }
+
 }

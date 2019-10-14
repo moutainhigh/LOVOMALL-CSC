@@ -33,4 +33,11 @@ public interface RechargeRecordService {
      * @param reviewStatus 审核状态
      */
     void updateReviewStatusById(String upId, String reviewStatus);
+
+    /**
+     * 按充值记录id查找充值记录对象
+     * @param upId 充值记录id
+     * @return 充值记录对象
+     */
+    RechargeRecord findByUpIdIs(String upId);
 }

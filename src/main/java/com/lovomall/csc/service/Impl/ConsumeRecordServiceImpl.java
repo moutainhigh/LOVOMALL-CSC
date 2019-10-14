@@ -45,4 +45,9 @@ public class ConsumeRecordServiceImpl implements ConsumeRecordService {
     public void updateOrderStatusById(String consuId, String orderStatus) {
         consumeRecordRepository.updateOrderStatusById(consuId, orderStatus);
     }
+
+    @Override
+    public ConsumeRecord findByConsuIdIs(String consuId) {
+        return consumeRecordRepository.findByConsuIdIs(consuId);
+    }
 }

@@ -47,4 +47,9 @@ public class RechargeRecordServiceImpl implements RechargeRecordService {
     public void updateReviewStatusById(String upId, String reviewStatus) {
         rechargeRecordRepository.updateReviewStatusById(upId, reviewStatus);
     }
+
+    @Override
+    public RechargeRecord findByUpIdIs(String upId) {
+        return rechargeRecordRepository.findByUpIdIs(upId);
+    }
 }

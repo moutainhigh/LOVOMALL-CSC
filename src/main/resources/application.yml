@@ -4,6 +4,8 @@ spring:
   profiles:
     active: dev # 当前项目激活配置环境
 ---
+server:
+  port: 8082
 spring:
   # 开发环境
   profiles: dev
@@ -34,7 +36,28 @@ spring:
       charset: utf-8
       force: true
       enabled: true
+  activemq:
+    broker-url: nio://192.168.1.222:61608
+    user: admin
+    password: admin
+    in-memory: false
+    pool:
+      enabled: true
+      max-connections: 10
+  jms:
+    pub-sub-domain: false # true topic false queue
 # 日志格式
 logging:
   pattern:
     dateformat: MM-dd HH-mm
+# MQ消息队列名
+queuename:
+  # 预存款审核模块消息队列名
+  precision:
+    receive:
+      recharge: RECHARGE_REVIEWT_QUEUE
+      consume: CONSUME_REVIEW_QUEUE
+    result:
+      recharge: RECHARGE_REVIEW_RESULT_QUEUE
+      consume: CONSUME_REVIEW_RESULT_QUEUE
+  # 各模块消息队列名按以上格式书写
