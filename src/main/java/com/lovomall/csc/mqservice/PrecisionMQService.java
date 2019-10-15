@@ -34,20 +34,36 @@ public class PrecisionMQService {
         this.consumeReviewResultQueue = consumeReviewResultQueue;
     }
 
+    /**
+     * 发送预存款充值审核结果消息
+     * @param object 审核结果
+     */
     public void rechargeReviewResultQueue(Object object){
         jmsMessagingTemplate.convertAndSend(rechargeReviewResultQueue, object);
     }
 
+    /**
+     * 发送预存款结算审核结果消息
+     * @param object 审核结果
+     */
     public void consumeReviewResultQueue(Object object){
         jmsMessagingTemplate.convertAndSend(consumeReviewResultQueue, object);
     }
 
-    @JmsListener(destination = "${queuename.precision.result.recharge}")
+    /**
+     * 监听预存款充值审核消息队列
+     * @param message 审核结果
+     */
+    @JmsListener(destination = "${queuename.precision.receive.recharge}")
     public void rechargeReviewQueue(Message message){
 
     }
 
-    @JmsListener(destination = "${queuename.precision.result.consume}")
+    /**
+     * 监听预存款结算审核消息队列
+     * @param message 审核结果
+     */
+    @JmsListener(destination = "${queuename.precision.receive.consume}")
     public void consumeReviewQueue(Message message){
 
     }
