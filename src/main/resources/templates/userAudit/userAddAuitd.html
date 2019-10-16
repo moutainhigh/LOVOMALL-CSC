@@ -19,11 +19,8 @@
     <script src="../../framework/jquery-ui-1.10.4.min.js"></script>
     <script src="../../framework/jquery.mousewheel.min.js"></script>
     <script src="../../framework/jquery.mCustomScrollbar.min.js"></script>
-    <!--<script src="../../framework/cframe.js"></script>&lt;!&ndash; 仅供所有子页面使用 &ndash;&gt;-->
+    <script src="../../framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
     <!-- 公共样式 结束 -->
-
-
-    <script src="../js/userAddAuitd.js"></script>
 
 </head>
 <body>
@@ -41,18 +38,7 @@
             <th>操作</th>
         </tr>
         </thead>
-        <tbody>
-        <tr>
-            <th>用户名</th>
-            <th>真实姓名</th>
-            <th>性别</th>
-            <th>手机号</th>
-            <th>资质图片</th>
-            <th>身份证图片</th>
-            <th>公司名字</th>
-            <th><a href="javascript:showInfo()" class="layui-btn"><i class="layui-icon layui-icon-search"></i>审核</a>
-            </th>
-        </tr>
+        <tbody id="data">
         </tbody>
     </table>
 
@@ -63,6 +49,7 @@
         <div class="layui-row">
             <div class="layui-col-md6">
                 <div class="layui-form-item">
+                    <input type="hidden" id="check_userId">
                     <label class="layui-form-label">用户名</label>
                     <label id="loginNameSpan" class="layui-form-label"></label>
                 </div>
@@ -78,7 +65,7 @@
                     <label class="layui-form-label">资质图片</label>
                 </div>
                 <div class="layui-form-item">
-                    <img src="">
+                    <img id="aptitudeImgInfo">
                 </div>
             </div>
             <div class="layui-col-md6">
@@ -98,12 +85,12 @@
                     <label class="layui-form-label">身份证图片</label>
                 </div>
                 <div class="layui-form-item">
-                    <img src="">
+                    <img id="identityImgInfo">
                 </div>
             </div>
         </div>
         <div style="text-align: center">
-            <a href="javascript:layer.closeAll()" class="layui-btn"><i class="layui-icon layui-icon-On-line"></i>通过</a>
+            <a href="javascript:addUserEntity()" class="layui-btn"><i class="layui-icon layui-icon-On-line"></i>通过</a>
             <a href="javascript:showMessage()" class="layui-btn"><i class="layui-icon layui-icon-cuo"></i>不通过</a>
         </div>
     </div>
@@ -112,14 +99,122 @@
         <div class="layui-form-item layui-form-text" style="text-align: center">
             <label class="layui-form-label">备注</label>
             <div class="layui-input-block">
-                <textarea name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                <form>
+                    <input id = "downUserId" type="hidden">
+                <textarea id="remark" name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+                </form>
             </div>
         </div>
         <div style="text-align: center">
-            <a href="javascript:layer.closeAll()" class="layui-btn"><i class="layui-icon layui-icon-ok"></i>确定</a>
+            <a href="javascript:passDown()" class="layui-btn"><i class="layui-icon layui-icon-ok"></i>确定</a>
         </div>
     </div>
 
 </div>
+
+
+
+<script>
+    var id ;
+    $(function () {
+        cutPage(1);
+    });
+
+    function cutPage(pageNO){
+        $.post("/user/page",
+            {
+                'pageNO': pageNO
+            },
+            function (info) {
+                var str = " ";
+                for (var i = 0; i < info.data.length; i++) {
+                    var obj = info.data[i];
+                    var str1 = JSON.stringify(obj);
+                    str += "<tr><td>" + obj.loginUser + "</td><td>" + obj.userName + "</td><td>" + obj.sex + "</td>" +
+                        "<td>" + obj.phoneNum + "</td><td><img src=\"data:image/jpeg;base64," + obj.aptitudeImg + "\"></td>" +
+                        "<td><img src=\"data:image/jpeg;base64," + obj.identityImg + "\"></td>" +
+                        "<td>" + obj.companyName + "</td>" +
+                        "<td><a onclick='showInfo(" +str1+ ")' class=\"layui-btn\"><i class=\"layui-icon layui-icon-search\"></i>审核</a></td></tr>";
+                }
+                $("#data").html(str);
+
+                if (pageNO === 1) {
+                    layui.use(['laypage', 'layer'], function () {
+                        var laypage = layui.laypage,
+                            layer = layui.layer;
+                        //执行一个laypage实例
+                        laypage.render({
+                            elem: 'pages' //注意，这里的 test1 是 ID，不用加 # 号
+                            , count: info.count, //数据总数，从服务端得到
+                            limit: 5,  //每页显示条数
+                            jump: function (obj, first) { //页码变化时触发
+                                if (!first) {
+                                    cutPage(obj.curr);
+                                }
+                            }
+                        });
+                    });
+                }
+            });
+    }
+
+    function showInfo(str1) {
+
+        //详细信息显示
+        $("#check_userId").val(str1.userId);
+        $("#loginNameSpan").html(str1.loginUser);
+        $("#sexSpan").html(str1.sex);
+        $("#companyNameSpan").html(str1.companyName);
+        $("#aptitudeImgInfo").attr("src","data:image/jpeg;base64," + str1.aptitudeImg);
+        $("#userNameSpan").html(str1.userName);
+        $("#phoneNumSpan").html(str1.phoneNum);
+        $("#identityImgInfo").attr("src","data:image/jpeg;base64," + str1.identityImg);
+
+        layer.open({
+            title: '用户信息审核',
+            type: 1,
+            shadeClose: true, //点击遮罩关闭
+            area: ['720px', '540px'], //宽高
+            anim: 4,                   //动画
+            content: $("#infoDiv"), //内容为frameDiv内容
+            offset: 'auto'//设置div位置，默认居中
+        });
+    }
+
+
+    function addUserEntity() {
+        var userId= $("#check_userId").val();
+        $.post("/user/addUser","userId=" + userId,function(info){
+            alert(info);
+        });
+        layer.closeAll();
+        cutPage(1);
+    }
+
+
+    function showMessage() {
+        var userId= $("#check_userId").val();
+        $("#downUserId").val(userId);
+        layer.open({
+            title: '理由信息',
+            type: 1,
+            shadeClose: true, //点击遮罩关闭
+            area: ['400px', '300px'], //宽高
+            anim: 4,                   //动画
+            content: $("#messageDiv"), //内容为frameDiv内容
+            offset: 'auto'//设置div位置，默认居中
+        });
+    }
+
+    function passDown() {
+        var userId = $("#downUserId").val();
+        var remark = $("#remark").val();
+        $.post("/user/addDown",{'userId':userId,'remark':remark},function (info) {
+            alert(info);
+        });
+        layer.closeAll();
+        cutPage(1);
+    }
+</script>
 </body>
 </html>

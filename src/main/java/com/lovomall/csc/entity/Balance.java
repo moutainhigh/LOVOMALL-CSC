@@ -37,8 +37,8 @@ public class Balance {
     private String userId;
 
     @Column(name = "curr_balance", length = 10, nullable = false)
-    private double currentBalance;
+    private double currentBalance = 0.0;
 
     @Column(name = "accu_money", length = 10, nullable = false)
-    private double accuMoney;
+    private double accuMoney = 0.0;
 }
