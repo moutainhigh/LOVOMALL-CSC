@@ -124,7 +124,10 @@ function getTips(_this, str){
 	});
 }
 
-function show(){
+function show(returnOrderCode){
+    //alert(returnOrderCode)
+     id=returnOrderCode
+        //alert(id)
     layer.open({
         shadeClose:true,
         type:1, //弹出页面层
@@ -134,6 +137,25 @@ function show(){
         content:$("#addDiv") //内容为需要显示的div
     });
 
+}
+
+function refund() {
+    $.post("/supplier/supplierNo","returnOrderCode="+id+"&remark="
+        +$("#remark").val(),function(info){
+
+        alert(JSON.stringify(info));
+
+
+
+        if(info == "ok"){
+            cutPage(1);
+            layer.closeAll();
+
+        }
+        else{
+            layui.alert("审核失败");
+        }
+    });
 }
 function san(){
     layer.open({
@@ -146,8 +168,19 @@ function san(){
     });
 
 }
+ var id=null
 function dang() {
-    layer.closeAll()
+    $.post("/supplier/supplierYes","returnOrderCode="+id,function(info){
+        //alert(JSON.stringify(info));
+        if(info == "ok"){
+            cutPage(1);
+            layer.closeAll();
+
+        }
+        else{
+            layui.alert("审核失败");
+        }
+    });
 }
 function showTwo(){
     layer.open({
@@ -159,4 +192,47 @@ function showTwo(){
         content:$("#queryDiv") //内容为需要显示的div
     });
 
+}
+$(function () {
+    cutPage(1);
+});
+function cutPage(pageNO){
+    $.post("/supplier/page",
+        {
+            "pageNO":pageNO
+        }
+        ,function(info){
+            var str = " ";
+            //console.log(info);
+            for(var i=0;i<info.data.length;i++){
+                var obj = info.data[i];
+                console.log(obj)
+                str += "<tr><td>"+obj.returnOrderCode+"</td>" +
+                    "<td>"+obj.supplierId+"</td>" +
+                    "<td>"+obj.orderDate+ "</td>" +
+                    "<td>"+obj.productName+"</td>" +
+                    "<td>"+obj.productNumber+"</td>" +
+                    "<td>"+obj.totalPrice+ "</td>" +
+                    "<td>"+obj.returnCause+"</td>" +
+                    "<td><a class=\"layui-btn\" href=\"javascript:show(\'"+obj.returnOrderCode+"\')\">审核</a></td></tr>";
+            }
+            $("#date1").html(str);
+
+            if(pageNO ==1){
+                layui.use('laypage', function(){
+                    var laypage = layui.laypage;
+                    //执行一个laypage实例
+                    laypage.render({
+                        elem: 'pages' //注意，这里的 test1 是 ID，不用加 # 号
+                        ,count: info.count, //数据总数，从服务端得到
+                        limit:5,  //每页显示条数
+                        jump:function(obj,first){ //页码变化时触发
+                            if(!first){
+                                cutPage(obj.curr);
+                            }
+                        }
+                    });
+                });
+            }
+        });
 }

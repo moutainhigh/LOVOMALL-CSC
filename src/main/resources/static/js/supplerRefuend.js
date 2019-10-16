@@ -124,7 +124,9 @@ function getTips(_this, str){
 	});
 }
 
-function show(){
+function show(returnOrderCode){
+    id=returnOrderCode
+    //alert(id)
     layer.open({
         shadeClose:true,
         type:1, //弹出页面层
@@ -134,6 +136,24 @@ function show(){
         content:$("#addDiv") //内容为需要显示的div
     });
 
+}
+
+function refund() {
+    $.post("/information/supplierNo","returnOrderCode="+id+"&messageInfo="
+        +$("#messageInfo").val(),function(info){
+        //alert(JSON.stringify(info));
+
+
+
+        if(info == "ok"){
+            cutPage(1);
+            layer.closeAll();
+
+        }
+        else{
+            layui.alert("审核失败");
+        }
+    });
 }
 function san(){
     layer.open({
@@ -146,10 +166,22 @@ function san(){
     });
 
 }
+var id=null
 function dang() {
-    layer.closeAll()
+    $.post("/information/supplierYes","returnOrderCode="+id,function(info){
+       // alert(info);
+        console.log(info);
+        if(info == "ok"){
+            cutPage(1);
+            layer.closeAll();
+
+        }
+        else{
+            layui.alert("审核失败");
+        }
+    });
 }
-function showTwo(){
+function showTwo(returnOrderCode){
     layer.open({
         shadeClose:true,
         type:1, //弹出页面层
@@ -157,6 +189,67 @@ function showTwo(){
         area:['400px','600px'], //弹出层大小
         anim:3, //动画
         content:$("#queryDiv") //内容为需要显示的div
-    });
 
+
+    });
+    $.post("/information/findList",
+
+            "supplierOrderId="+returnOrderCode
+
+        ,function(info){
+            var str = " ";
+            //console.log(info);
+            for(var i=0;i<info.data.length;i++) {
+                var obj = info.data[i];
+
+                str += "<tr><td>" + obj.messageDate + "</td>" +
+                    "<td>" + obj.messageInfo + "</td>" +
+                    "<td>" + obj.messageSender + "</td></tr>";
+            }
+            $("#data2").html(str)
+
+        })
+}
+
+$(function () {
+    cutPage(1);
+});
+function cutPage(pageNO) {
+    $.post("/information/page",
+        {
+            "pageNO": pageNO
+        }
+        , function (info) {
+            var str = " ";
+            //console.log(info);
+            for (var i = 0; i < info.data.length; i++) {
+                var obj = info.data[i];
+
+                str += "<tr><td>" + obj.returnOrderCode + "</td>" +
+                    "<td>" + obj.supplierId + "</td>" +
+                    "<td>" + obj.productName + "</td>" +
+                    "<td>" + obj.productNumber + "</td>" +
+                    "<td>" + obj.totalPrice + "</td>" +
+                    "<td><a class=\"layui-btn\" href=\"javascript:show(\'"+obj.returnOrderCode+"\')\">审核</a>" +
+                    "<a class=\"layui-btn\" href=\"javascript:showTwo(\'"+obj.returnOrderCode+"\')\">消息</a></td></tr>";
+            }
+            $("#date1").html(str);
+
+            if (pageNO == 1) {
+                layui.use('laypage', function () {
+                    var laypage = layui.laypage;
+                    //执行一个laypage实例
+                    laypage.render({
+                        elem: 'pages' //注意，这里的 test1 是 ID，不用加 # 号
+                        , count: info.count, //数据总数，从服务端得到
+                        limit: 5,  //每页显示条数
+                        jump: function (obj, first) { //页码变化时触发
+                            if (!first) {
+                                cutPage(obj.curr);
+                            }
+                        }
+                    });
+                });
+            }
+        });
 }

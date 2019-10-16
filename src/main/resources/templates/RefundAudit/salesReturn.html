@@ -57,69 +57,15 @@
 						<th>退货单编号</th>
 						<th>供应商名称</th>
 						<th>退货单生成时间</th>
-						<th>商品编号</th>
 						<th>商品名称</th>
-						<th>商品类型</th>
-						<th>商品规格</th>
 						<th>退货数量</th>
 						<th>退货总价</th>
 						<th>退货原因</th>
-						<th>订单状态</th>
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>
-                            <button class="layui-btn " onclick="show()" >审核</button>
-                            <button class="layui-btn " onclick="showTwo()">基本信息</button>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>
-                            <button class="layui-btn " onclick="show()" >审核</button>
-                            <button class="layui-btn " onclick="showTwo()">基本信息</button>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td>
-                            <button class="layui-btn " onclick="show()" >审核</button>
-                            <button class="layui-btn " onclick="showTwo()">基本信息</button>
-						</td>
-					</tr>
+				<tbody id="date1">
+
 				</tbody>
 			</table>
 
@@ -141,8 +87,8 @@
                 <form id="sanForm" class="layui-form" >
                     <!--<input type="hidden" id="id" name="id">  -->
                     <textarea style="margin-left: 30px;" name="info" cols="30" rows="8" placeholder="请输入"
-                    ></textarea><p>
-                    <a  style="margin-left: 100px;margin-top: 80px"href="javascript:dang()" class="layui-btn layui-btn" >
+                   id="remark" ></textarea><p>
+                    <a  style="margin-left: 100px;margin-top: 80px"href="javascript:refund()" class="layui-btn layui-btn" >
                         <i class="layui-icon layui-icon-add-circle" ></i>提交</a>
                 </form>
             </div>
@@ -179,23 +125,10 @@
 
 
 			<!-- layUI 分页模块 -->
-			<!--<div id="pages"></div>-->
-			<!--<script>-->
-				<!--layui.use(['laypage', 'layer'], function() {-->
-					<!--var laypage = layui.laypage,-->
-						<!--layer = layui.layer;-->
-				<!---->
-					<!--//总页数大于页码总数-->
-					<!--laypage.render({-->
-					    <!--elem: 'pages'-->
-					    <!--,count: 100-->
-					    <!--,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']-->
-					    <!--,jump: function(obj){-->
-					      <!--console.log(obj)-->
-					    <!--}-->
-					<!--});-->
-				<!--});-->
-			<!--</script>-->
+			<div id="pages"></div>
+			<script>
+
+			</script>
 		</div>
 	</body>
 

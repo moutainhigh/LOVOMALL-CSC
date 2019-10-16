@@ -55,54 +55,14 @@
 				<thead>
 					<tr>
 						<th>订单编号</th>
-						<th>订单状态</th>
-						<th>申请退货原因</th>
-						<th>退货数量</th>
 						<th>商品名称</th>
 						<th>退货订单总价</th>
+						<td>订单状态</td>
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>龙九山</td>
-						<td>DLS201802281450280741</td>
-						<td>无锡市</td>
-						<td>龙九山</td>
-						<td>龙九山</td>
-						<td>18600001111</td>
+				<tbody id="data">
 
-						<td>
-							<button class="layui-btn " onclick="show()" >审核</button>
-							<button class="layui-btn " onclick="showTwo()">基本信息</button>
-						</td>
-					</tr>
-					<tr>
-						<td>龙九山</td>
-						<td>DLS201802281450280741</td>
-						<td>无锡市</td>
-						<td>龙九山</td>
-						<td>龙九山</td>
-						<td>18600001111</td>
-
-						<td>
-							<button class="layui-btn " onclick="show()" >审核</button>
-							<button class="layui-btn "onclick="showTwo()">基本信息</button>
-						</td>
-					</tr>
-					<tr>
-						<td>龙九山</td>
-						<td>DLS201802281450280741</td>
-						<td>无锡市</td>
-						<td>龙九山</td>
-						<td>龙九山</td>
-						<td>18600001111</td>
-
-						<td>
-							<button class="layui-btn " onclick="show()" >审核</button>
-							<button class="layui-btn " onclick="showTwo()">基本信息</button>
-						</td>
-					</tr>
 				</tbody>
 			</table>
 			<div id="addDiv" style="display: none">
@@ -122,9 +82,9 @@
 				<!--layer.closeAll()关闭所有层-->
 				<form id="sanForm" class="layui-form" >
 					<!--<input type="hidden" id="id" name="id">  -->
-					<textarea style="margin-left: 30px;" name="info" cols="30" rows="8" placeholder="请输入"
-				></textarea><p>
-					<a  style="margin-left: 100px;margin-top: 80px"href="javascript:dang()" class="layui-btn layui-btn" >
+					<textarea style="margin-left: 30px;" name="rejectCause" cols="30" rows="8" placeholder="请输入"
+				id="rejectCause"></textarea><p>
+					<a  style="margin-left: 100px;margin-top: 80px"href="javascript:refund()" class="layui-btn layui-btn" >
 						<i class="layui-icon layui-icon-add-circle" ></i>提交</a>
 				</form>
 			</div>
@@ -135,20 +95,21 @@
 					<thead>
 					<tr>
 						<th>审核日期</th>
+						<th>审核编号</th>
 						<th>审核结果</th>
 						<th>拒绝原因</th>
+						<th>申请原因</th>
+						<th>退款时间</th>
+						<th>操作</th>
+
 					</tr>
 					</thead>
-					<tr>
-						<td></td>
-						<td></td>
-						<td></td>
-					</tr>
-					<tbody>
+
+					<tbody id="data1">
 					</tbody>
 				</table>
 
-						<a href="javascript:dang()" class="layui-btn" style="margin-left: 200px">
+						<a href="javascript: layer.closeAll" class="layui-btn" style="margin-left: 200px">
 							<i class="layui-icon layui-icon-add-circle-fine"></i>确定</a>
 
 			</div>
@@ -156,24 +117,9 @@
 
 
 
-			<!-- layUI 分页模块 -->
-			<!--<div id="pages"></div>-->
-			<!--<script>-->
-				<!--layui.use(['laypage', 'layer'], function() {-->
-					<!--var laypage = layui.laypage,-->
-						<!--layer = layui.layer;-->
-				<!---->
-					<!--//总页数大于页码总数-->
-					<!--laypage.render({-->
-					    <!--elem: 'pages'-->
-					    <!--,count: 100-->
-					    <!--,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']-->
-					    <!--,jump: function(obj){-->
-					      <!--console.log(obj)-->
-					    <!--}-->
-					<!--});-->
-				<!--});-->
-			<!--</script>-->
+
+			<div id="pages"></div>
+
 		</div>
 	</body>
 

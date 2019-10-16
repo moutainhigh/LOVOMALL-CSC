@@ -16,9 +16,9 @@ spring:
   # datasource 数据源配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # 数据库驱动版本 com.mysql.jdbc.Driver 是旧版本驱动
-    url: jdbc:mysql://127.0.0.1:3306/lovomall-csc?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://127.0.0.1:3306/j171?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=UTC
 # 数据库名统一为 lovoma ll-csc
-    password: 123 # 修改为自己数据库密码
+    password: 199139 # 修改为自己数据库密码
     username: root # 修改为自己数据库账号
   # jpa jpa配置
   jpa:
