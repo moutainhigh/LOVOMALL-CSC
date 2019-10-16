@@ -11,5 +11,4 @@ public class LovoMallCSCApplication {
     public static void main(String[] args) {
         SpringApplication.run(LovoMallCSCApplication.class, args);
     }
-
 }

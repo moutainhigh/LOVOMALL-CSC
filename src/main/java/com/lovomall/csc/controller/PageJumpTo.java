@@ -16,6 +16,9 @@ public class PageJumpTo {
     @RequestMapping(path = "/frame")
     public String frame(){ return "frame"; }
 
+    @RequestMapping(path = "/login")
+    public String login(){ return "login"; }
+
     @RequestMapping(path = "/updatePwd")
     public String updatePwd(){ return "updatePwd"; }
 

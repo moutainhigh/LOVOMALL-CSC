@@ -63,83 +63,59 @@
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>龙九山</td>
-						<td>DLS201802281450280741</td>
-						<td>无锡市</td>
-						<td>龙九山</td>
+				<tbody id="data">
 
-						<td>028-6666666</td>
-						<td><a class="layui-btn  layui-btn-sm" href="../../images/goodsPIC1.png">查看</a></td>
-						<td>
-							<button class="layui-btn  layui-btn-sm" onclick="two()">审核</button>
-
-						</td>
-					</tr>
-					<tr>
-						<td>龙九山</td>
-						<td>DLS201802281450280741</td>
-						<td>无锡市</td>
-						<td>龙九山</td>
-
-						<td>028-6666666</td>
-						<td><a class="layui-btn  layui-btn-sm" href="../../images/goodsPIC1.png">查看</a></td>
-						<td>
-							<button class="layui-btn  layui-btn-sm" onclick="two()">审核</button>
-						</td>
-					</tr>
-					<tr>
-						<td>龙九山</td>
-						<td>DLS201802281450280741</td>
-						<td>无锡市</td>
-						<td>龙九山</td>
-						<td>028-6666666</td>
-						<td><a  class="layui-btn  layui-btn-sm" href="../../images/goodsPIC1.png">查看</a></td>
-						<td>
-							<button class="layui-btn  layui-btn-sm" onclick="two()">审核</button>
-						</td>
-					</tr>
-					<tr>
-						<td>龙九山</td>
-						<td>DLS201802281450280741</td>
-						<td>无锡市</td>
-						<td>龙九山</td>
-						<td>028-6666666</td>
-						<td><a  class="layui-btn  layui-btn-sm" href="../../images/goodsPIC1.png">查看</a></td>
-						<td>
-							<button class="layui-btn  layui-btn-sm" onclick="two()">审核</button>
-						</td>
-					</tr>
 				</tbody>
 			</table>
+			<div id="cutPageDiv"></div>
 
-			<!-- layUI 分页模块 -->
-			<div id="pages"></div>
-			<script>
-				layui.use(['laypage', 'layer'], function() {
-					var laypage = layui.laypage,
-							layer = layui.layer;
-					//总页数大于页码总数
-					laypage.render({
-						elem: 'pages'
-						,count: 100
-						,layout: ['curr','prev', 'page', 'next','limit','refresh','skip']
-						, limit: 5                      //每页显示条数
-						, limits: [10, 20, 30]
-						, curr: 1                        //起始页
-						// , prev: '上一页'                 //上一页文本
-						// , next: '下一页'                 //下一页文本
-						, first: 1                      //首页文本
-						, last: 1                    //尾页文本
-						,jump: function(obj){
-							console.log(obj)
-						}
-					});
-				});
-			</script>
 			</div>
 
+
+		</div>
+
+		<script>
+			$(function(){
+				cutPage(1);
+			});
+			function cutPage(pageNO){
+				$.post("/supplier/allSupplier","pageNO="+pageNO,function(info){
+					// alert(JSON.stringify(info));
+					var str = "";
+					for(var i=0;i<info.data.length;i++){
+						var obj = info.data[i];
+						console.log(obj)
+						str += "<tr><td>"+obj.supplierName+
+								"</td><td>"+obj.supplierScope+
+								"</td><td>"+obj.supplierPhone+
+								"</td><td>"+obj.supplierSite+
+								"</td><td>"+obj.supplierTime+
+								"</td><td><img style='height: 60px;width: 200px' src='data:image/jpg;base64,"+obj.supplierLicansePath+"'>"+
+								"</td><td><a class='layui-btn'  onclick=\"two(\'"+obj.supplierId+"\')\">审核</a></td></tr>"
+					}
+
+					$("#data").html(str);
+
+					if(pageNO ==1){
+						layui.use('laypage', function(){
+							var laypage = layui.laypage;
+							//执行一个laypage实例
+							laypage.render({
+								elem: 'cutPageDiv' //注意，这里的 test1 是 ID，不用加 # 号
+								,count: info.count, //数据总数，从服务端得到
+								limit:3,  //每页显示条数
+								jump:function(obj,first){ //页码变化时触发
+									if(!first){
+										cutPage(obj.curr);
+									}
+								}
+							});
+						});
+					}
+
+				},"json");
+			}
+		</script>
 
 		<div id="findDiv" style="display: none">
 			<div style="width: 100px;height: 100px">
@@ -149,34 +125,38 @@
 		</div>
 
 		<div id="findDiv1" style="display: none">
-			<div style="height: 200px">
-				<div style="margin-left: 10px">
-					<h1>审核意见：</h1>
-				</div>
+			<form id="examineFrom">
+				<div style="height: 200px">
+					<div style="margin-left: 10px">
+						<h1>审核意见：</h1>
+					</div>
 
-				<div style="margin-left: 10px">
-					<textarea style="height: 150px;width: 580px;">
+					<div style="margin-left: 10px">
+					<textarea style="height: 150px;width: 580px" id="examineInfo">
 				</textarea>
+					</div>
 				</div>
-			</div>
 
-			<div style="float: left;margin-left: 30px">
-				<span>审核人: </span>罗建军<br><br>
-				<span>审核时间：</span>2019-10-9<br><br>
-				供应商等级：<span>
-					<select>
+				<div style="float: left;margin-left: 30px">
+					审核人: <span id="examineMan">罗建军</span><br>
+					审核时间：<span id="examineTime"></span><br>
+					供应商等级：<span>
+					<select id="supplierGrade">
+						<option value="无">无等级</option>
 						<option>钻石会员</option>
 						<option>铂金会员</option>
 						<option>白银会员</option>
 					</select>
 				</span>
-			</div>
+				</div>
+			</form>
+
 			<div style="float: left;margin-left: 100px;margin-top: 10px">
 				<!--layer.closeAll()关闭所有弹出层-->
 				<div style="text-align: center">
 					<!--layer.closeAll()关闭所有弹出层-->
-					<a href="javascript:layer.closeAll()" class="layui-btn layui-btn-danger" style="margin-top: 50px;margin-left: 10px"><i class="layui-icon"></i>审核不通过</a>
-					<a href="javascript:layer.closeAll()" class="layui-btn" style="margin-top: 50px;text-align: center"><i class="layui-icon"></i>审核通过</a>
+					<a  href="javascript:examineNo()" class="layui-btn layui-btn-danger" style="margin-top: 50px;margin-left: 10px"><i class="layui-icon"></i>审核不通过</a>
+					<a href="javascript:examineYes()" class="layui-btn" style="margin-top: 50px;text-align: center"><i class="layui-icon"></i>审核通过</a>
 				</div>
 			</div>
 
