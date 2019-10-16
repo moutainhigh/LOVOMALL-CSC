@@ -31,6 +31,109 @@
 		<script src="../../framework/cframe.js"></script><!-- 仅供所有子页面使用 -->
 		<!-- 公共样式 结束 -->
 
+
+
+			<script>
+			$(function () {
+				var priceReviewid;
+				cutPage(1);
+			});
+
+
+			function cutPage(pageNO){
+				$.post("/pagePriceReview/pageP",
+						{
+							'pageNO':pageNO
+						},
+						function(info){
+							var str = "";
+
+							for(var i=0;i<info.data.length;i++){
+								var obj = info.data[i];
+								str += "<tr><td>"+obj.bidNumber+"</td><td>"+obj.supplierName+"</td><td>"+obj.productName+ "</td>" +
+										"<td>"+obj.allMoney+"</td><td>"+obj.productNum+"</td><td>"+obj.priceReviewStatus+"</td>" +
+										"<td><a class='layui-btn' href=\"javascript:infofindById(\'"+obj.priceReviewId+"\')\">审核</a></td></tr>";
+							}
+
+							$("#dataBody").html(str);
+
+							if(pageNO === 1){
+								layui.use('laypage', function(){
+									var laypage = layui.laypage;
+									//执行一个laypage实例
+									laypage.render({
+										elem: 'pages' //注意，这里的 test1 是 ID，不用加 # 号
+										,count: info.count, //数据总数，从服务端得到
+										limit:5,  //每页显示条数
+										jump:function(obj,first){ //页码变化时触发
+											if(!first){
+												cutPage(obj.curr);
+											}
+										}
+									});
+								});
+							}
+
+						});
+			}
+
+			function infofindById(priceReviewId){
+				// this.updateT(priceReviewId)
+				priceReviewid=priceReviewId
+
+				layer.open({
+					title:'报价审核',
+					type: 1,
+					shadeClose:true, //点击遮罩关闭
+					area: ['480px', '360px'], //宽高
+					anim: 2,                   //动画
+					content:$("#infoDiv"), //内容为frameDiv内容
+					offset:'auto'//设置div位置，默认居中
+				});
+				$.post("/priceReview/findById","priceReviewId="+priceReviewId,function(info){
+					$("#infonameSpan").html(info.data.allMoney);
+					$("#infoPN").val(info.data.productNum);
+				});
+
+
+
+			}
+
+			function updateT(){
+				$.post("/priceReview/updateNum","priceReviewId="+priceReviewid+"&productNum="+$("#infoPN").val(),function(info){
+				});
+				$.post("/priceReview/updateT","priceReviewId="+priceReviewid+"&productNum="
+						+$("#infoPN").val()+"&priceReviewOpinion="
+						+$("#priceReviewOpinion").val(),function(info){
+					console.log(info)
+					if (info=="ok"){
+						alert("审核完成")
+						cutPage(1);
+						layer.closeAll();
+					}
+					else {
+						alert("审核失败")
+					}
+				});
+			}
+			function updateF(){
+				$.post("/priceReview/updateNum","priceReviewId="+priceReviewid+"&productNum="+$("#infoPN").val(),function(info){
+				});
+				$.post("/priceReview/updateF","priceReviewId="+priceReviewid+"&priceReviewOpinion="
+						+$("#priceReviewOpinion").val(),function(info){
+					if (info=="ok"){
+						alert("审核完成")
+						cutPage(1);
+						layer.closeAll();
+					}
+					else {
+						alert("审核失败")
+					}
+				});
+			}
+		</script>
+
+
 	</head>
 
 	<body>
@@ -45,18 +148,6 @@
 						</div>
 					</div>
 
-
-				<script>
-					layui.use('form', function() {
-						var form = layui.form;
-				
-						//监听提交
-						form.on('submit(formDemo)', function(data) {
-							layer.msg(JSON.stringify(data.field));
-							return false;
-						});
-					});
-				</script>
 			</div>
 			
 			<table class="layui-table">
@@ -67,103 +158,38 @@
 						<th>商品名称</th>
 						<th>商品报价</th>
 						<th>商品数量</th>
+						<th>审核状态</th>
 						<th>操作</th>
 					</tr>
 				</thead>
-				<tbody>
-					<tr>
-						<td>001</td>
-						<td>长虹电子</td>
-						<td>华为mate30pro</td>
-						<td>5400</td>
-						<td>50</td>
-						<td>
-							<a class='layui-btn' href='javascript:infofindById()'>审核</a>
-						</td>
-					</tr>
-					<tr>
-						<td>001</td>
-						<td>长虹电子</td>
-						<td>华为mate30pro</td>
-						<td>5400</td>
-						<td>50</td>
-						<td>
-							<a class='layui-btn' href='javascript:infofindById()'>审核</a>
-						</td>
-					</tr>
-					<tr>
-						<td>001</td>
-						<td>长虹电子</td>
-						<td>华为mate30pro</td>
-						<td>5400</td>
-						<td>50</td>
-						<td>
-							<a class='layui-btn' href='javascript:infofindById()'>审核</a>
-						</td>
-					</tr>
+				<tbody id="dataBody">
+
 				</tbody>
 			</table>
 			<div id="infoDiv" style="display:none;text-align: center;padding-top: 30px">
 				<form id="infoForm">
 					<input type="hidden" id="infoid" name="id">
-					报价信息：<span id="infonameSpan">5400</span><br><br>
-					采购数量：<input type="text" id="infoPN" value="50"><br><br>
+					报价信息：<span id="infonameSpan"></span><br><br>
+					采购数量：<input type="text" id="infoPN"><br><br>
 					<div class="layui-form-item layui-form-text" style="width: 290px;margin: 0 auto">
 						<label class="layui-form-label">审核意见：</label>
 						<div class="layui-input-block"style="margin-left: 10px">
-							<textarea  name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+							<textarea  id="priceReviewOpinion" name="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
 						</div>
 					</div><br>
-					<a href='javascript:layer.closeAll()' class="layui-btn">通过</a>
-					<a href='javascript:layer.closeAll()' class="layui-btn">不通过</a>
+					<a href='javascript:updateT()' class="layui-btn">通过</a>
+					<a href='javascript:updateF()' class="layui-btn">不通过</a>
 				</form>
 			</div>
-			
+
 			<!-- layUI 分页模块 -->
 			<div id="pages"></div>
-			<script>
-				layui.use(['laypage', 'layer'], function() {
-					var laypage = layui.laypage,
-						layer = layui.layer;
-				
-					//总页数大于页码总数
-					laypage.render({
-					    elem: 'pages'
-					    ,count: 20
-					    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'skip']
-					    ,jump: function(obj){
-					      console.log(obj)
-					    }
-					});
-				});
-			</script>
+
 		</div>
+
 	</body>
 
 
-	<script>
-		function infofindById(){
-			layer.open({
-				title:'报价审核',
-				type: 1,
-				shadeClose:true, //点击遮罩关闭
-				area: ['480px', '360px'], //宽高
-				anim: 2,                   //动画
-				content:$("#infoDiv"), //内容为frameDiv内容
-				offset:'auto'//设置div位置，默认居中
-			});
 
-			// $.post("/shopProject/product/findById","id="+id,function(info){
-			// 	alert(JSON.stringify(info));
-			// 	$("#infonameSpan").html(info.productName);
-			// 	$("#infopriceSpan").html(info.price);
-			// 	$("#infodateSpan").html(info.createDate);
-			// 	$("#infopic").attr("src","image/"+info.picture);
-			// 	$("#infoid").val(info.id);
-			// },"json");
-
-
-		}
-	</script>
 
 </html>
