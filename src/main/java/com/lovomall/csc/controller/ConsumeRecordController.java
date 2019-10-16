@@ -1,8 +1,12 @@
 package com.lovomall.csc.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lovomall.csc.dto.ConsumeReviewResultDTO;
 import com.lovomall.csc.entity.Balance;
 import com.lovomall.csc.entity.ConsumeRecord;
 import com.lovomall.csc.entity.ConsumeReviewRecord;
+import com.lovomall.csc.mqservice.PrecisionMQService;
 import com.lovomall.csc.repository.DiscountLevelRepository;
 import com.lovomall.csc.service.BalanceService;
 import com.lovomall.csc.service.ConsumeRecordService;
@@ -28,16 +32,19 @@ import java.util.Map;
 @RequestMapping(path = "/consume")
 public class ConsumeRecordController {
 
+    private final PrecisionMQService precisionMQService;
     private final ConsumeRecordService consumeRecordService;
     private final ConsumeReviewRecordService consumeReviewRecordService;
     private final BalanceService balanceService;
     private final DiscountLevelRepository discountLevelRepository;
 
     @Autowired
-    public ConsumeRecordController(ConsumeRecordService consumeRecordService,
+    public ConsumeRecordController(PrecisionMQService precisionMQService,
+                                   ConsumeRecordService consumeRecordService,
                                    ConsumeReviewRecordService consumeReviewRecordService,
                                    BalanceService balanceService,
                                    DiscountLevelRepository discountLevelRepository) {
+        this.precisionMQService = precisionMQService;
 
         this.consumeRecordService = consumeRecordService;
         this.consumeReviewRecordService = consumeReviewRecordService;
@@ -72,13 +79,6 @@ public class ConsumeRecordController {
         return map;
     }
 
-    @RequestMapping(path = "/orderItem")
-    @ResponseBody
-    public List<Object> orderItem(String consuId){
-
-        return null;
-    }
-
     @RequestMapping(path = "/reviewPass")
     @ResponseBody
     public void reviewPass(String consuId, String name,double payMoney){
@@ -95,6 +95,19 @@ public class ConsumeRecordController {
         balanceService.updateBalance(consumeRecord.getBalance().getUserId(),
                 payMoney);
 
+        // 发送审核结果消息至前端
+        ConsumeReviewResultDTO resultDTO = new ConsumeReviewResultDTO();
+        resultDTO.setPayMoney(payMoney);
+        resultDTO.setUserId(consuId);
+        resultDTO.setOrderId(consumeRecord.getOrderId());
+        resultDTO.setReviewResult("通过");
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String jsonString = mapper.writeValueAsString(resultDTO);
+            precisionMQService.consumeReviewResultQueue(jsonString);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     @RequestMapping(path = "/reviewFailed")
@@ -111,6 +124,20 @@ public class ConsumeRecordController {
         reviewRecord.setConsumeRecord(consumeRecord);
 
         consumeReviewRecordService.save(reviewRecord);
+
+        // 发送审核结果消息至前端
+        ConsumeReviewResultDTO resultDTO = new ConsumeReviewResultDTO();
+        resultDTO.setPayMoney(0);
+        resultDTO.setUserId(consuId);
+        resultDTO.setOrderId(consumeRecord.getOrderId());
+        resultDTO.setReviewResult("未通过");
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            String jsonString = mapper.writeValueAsString(resultDTO);
+            precisionMQService.consumeReviewResultQueue(jsonString);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
 
     }
 }

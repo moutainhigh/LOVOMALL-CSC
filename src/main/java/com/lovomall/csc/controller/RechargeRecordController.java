@@ -1,7 +1,13 @@
 package com.lovomall.csc.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
+import com.lovomall.csc.dto.RechargeReviewResultDTO;
 import com.lovomall.csc.entity.RechargeRecord;
 import com.lovomall.csc.entity.RechargeReviewRecord;
+import com.lovomall.csc.mqservice.PrecisionMQService;
+import com.lovomall.csc.repository.DiscountLevelRepository;
 import com.lovomall.csc.service.BalanceService;
 import com.lovomall.csc.service.RechargeRecordService;
 import com.lovomall.csc.service.RechargeReviewRecordService;
@@ -11,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,17 +33,24 @@ import java.util.Map;
 @RequestMapping(path = "/recharge")
 public class RechargeRecordController {
 
+    private final PrecisionMQService precisionMQService;
     private final RechargeRecordService rechargeRecordService;
     private final RechargeReviewRecordService rechargeReviewRecordService;
     private final BalanceService balanceService;
+    private final DiscountLevelRepository discountLevelRepository;
+
 
     @Autowired
-    public RechargeRecordController(RechargeRecordService rechargeRecordService,
+    public RechargeRecordController(PrecisionMQService precisionMQService,
+                                    RechargeRecordService rechargeRecordService,
                                     RechargeReviewRecordService rechargeReviewRecordService,
-                                    BalanceService balanceService) {
+                                    BalanceService balanceService,
+                                    DiscountLevelRepository discountLevelRepository) {
+        this.precisionMQService = precisionMQService;
         this.rechargeRecordService = rechargeRecordService;
         this.rechargeReviewRecordService = rechargeReviewRecordService;
         this.balanceService = balanceService;
+        this.discountLevelRepository = discountLevelRepository;
     }
 
     @RequestMapping(path = "/page")
@@ -69,6 +83,27 @@ public class RechargeRecordController {
         // 更新余额及累计充值金额
         balanceService.updateAccumulate(rechargeRecord.getBalance().getUserId(),
                 rechargeRecord.getAmount());
+        // 封装审核结果DTO
+        RechargeReviewResultDTO resultDTO = new RechargeReviewResultDTO();
+        resultDTO.setAccuMoney(rechargeRecord.getAmount());
+        resultDTO.setCurrentBalance(rechargeRecord.getBalance().getCurrentBalance());
+        resultDTO.setUserId(rechargeRecord.getBalance().getUserId());
+        resultDTO.setUpId(upId);
+        resultDTO.setReviewResult("通过");
+
+        // 根据余额记录累计充值金查询对应折扣率
+        double discountPer = discountLevelRepository.findDiscountPerByAccuMoney(
+                rechargeRecord.getBalance().getAccuMoney());
+
+        resultDTO.setDiscountLevel(discountPer);
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString;
+        try {
+            jsonString = mapper.writeValueAsString(resultDTO);
+            precisionMQService.rechargeReviewResultQueue(jsonString);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     @RequestMapping(path = "/reviewFailed")
@@ -82,6 +117,12 @@ public class RechargeRecordController {
         reviewRecord.setReviewAdvice(reviewAdvice);
         reviewRecord.setRechargeRecord(rechargeRecord);
         rechargeReviewRecordService.save(reviewRecord);
+        LocalDate now = LocalDate.now();
+        String jsonString =
+                "{\"upId\":\"" + upId + "\",\"reviewAdvice\":\"" + reviewAdvice +
+                "\",\"reviewResult\":\"" + "未通过" +"\",\"reviewDate\":\"" + now.toString()+ "\"}";
+
+        precisionMQService.rechargeReviewResultQueue(jsonString);
     }
 
 }

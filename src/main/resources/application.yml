@@ -55,7 +55,7 @@ queuename:
   # 预存款审核模块消息队列名
   precision:
     receive:
-      recharge: RECHARGE_REVIEWT_QUEUE
+      recharge: RECHARGE_REVIEW_QUEUE
       consume: CONSUME_REVIEW_QUEUE
     result:
       recharge: RECHARGE_REVIEW_RESULT_QUEUE

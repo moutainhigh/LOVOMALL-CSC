@@ -1,5 +1,6 @@
 package com.lovomall.csc.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,6 +39,7 @@ public class RechargeRecord {
     private String upId;
 
     /** 用户余额对象*/
+    @JsonIgnore
     @ManyToOne
     @JoinColumn (name = "baId", nullable = false)
     private Balance balance;
