@@ -13,12 +13,13 @@ import com.lovomall.csc.service.ConsumeRecordService;
 import com.lovomall.csc.service.ConsumeReviewRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.jms.Queue;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,6 +33,8 @@ import java.util.Map;
 @RequestMapping(path = "/consume")
 public class ConsumeRecordController {
 
+    private final JmsMessagingTemplate jmsMessagingTemplate;
+    private final Queue shoppingReviewResultQueue;
     private final PrecisionMQService precisionMQService;
     private final ConsumeRecordService consumeRecordService;
     private final ConsumeReviewRecordService consumeReviewRecordService;
@@ -39,11 +42,13 @@ public class ConsumeRecordController {
     private final DiscountLevelRepository discountLevelRepository;
 
     @Autowired
-    public ConsumeRecordController(PrecisionMQService precisionMQService,
+    public ConsumeRecordController(JmsMessagingTemplate jmsMessagingTemplate, Queue shoppingReviewResultQueue, PrecisionMQService precisionMQService,
                                    ConsumeRecordService consumeRecordService,
                                    ConsumeReviewRecordService consumeReviewRecordService,
                                    BalanceService balanceService,
                                    DiscountLevelRepository discountLevelRepository) {
+        this.jmsMessagingTemplate = jmsMessagingTemplate;
+        this.shoppingReviewResultQueue = shoppingReviewResultQueue;
         this.precisionMQService = precisionMQService;
 
         this.consumeRecordService = consumeRecordService;
@@ -58,6 +63,7 @@ public class ConsumeRecordController {
         Map<String, Object> map = new HashMap<>();
         Page<ConsumeRecord> page = consumeRecordService.findAllByOrderStatusIs(
                 pageNO - 1, 5, "未审核");
+
         map.put("data", page.getContent());
         map.put("count", (int)page.getTotalElements());
         return map;
@@ -84,7 +90,8 @@ public class ConsumeRecordController {
     public void reviewPass(String consuId, String name,double payMoney){
         ConsumeRecord consumeRecord = consumeRecordService.findByConsuIdIs(consuId);
         consumeRecord.setPayMoney(payMoney);
-
+        consumeRecord.setOrderStatus("已审核");
+        consumeRecordService.save(consumeRecord);
         // 添加消费审核记录
         ConsumeReviewRecord reviewRecord = new ConsumeReviewRecord();
         reviewRecord.setName(name);
@@ -104,7 +111,7 @@ public class ConsumeRecordController {
         ObjectMapper mapper = new ObjectMapper();
         try {
             String jsonString = mapper.writeValueAsString(resultDTO);
-            precisionMQService.consumeReviewResultQueue(jsonString);
+            jmsMessagingTemplate.convertAndSend(shoppingReviewResultQueue,jsonString);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -134,7 +141,7 @@ public class ConsumeRecordController {
         ObjectMapper mapper = new ObjectMapper();
         try {
             String jsonString = mapper.writeValueAsString(resultDTO);
-            precisionMQService.consumeReviewResultQueue(jsonString);
+            jmsMessagingTemplate.convertAndSend(shoppingReviewResultQueue,jsonString);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

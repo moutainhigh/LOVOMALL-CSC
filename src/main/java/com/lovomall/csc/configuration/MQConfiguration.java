@@ -34,4 +34,19 @@ public class MQConfiguration {
     public Queue consumeReviewResultQueue(){
         return new ActiveMQQueue(CONSUME_REVIEW_RESULT_QUEUE);
     }
+
+    @Bean
+    Queue supplierOrderQueue(){
+        return new ActiveMQQueue("SUP_ORDER_QUEUE");
+    }
+
+    @Bean
+    Queue productReviewResultQueue(){
+        return new ActiveMQQueue("PRO_REVIEW_RESULT_QUEUE");
+    }
+
+    @Bean
+    Queue shoppingReviewResultQueue(){
+        return new ActiveMQQueue("SHO_PPI_NG");
+    }
 }

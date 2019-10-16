@@ -91,6 +91,7 @@
 					},
 					function(info){
 						var str = "";
+						console.log(info);
 						for(var i=0;i<info.data.length;i++){
 							var obj = info.data[i];
 							str += "<tr><td>"+obj.upId+"</td><td>"+obj.balance.userId+"</td><td>"+obj.amount+ "</td>" +
@@ -140,6 +141,7 @@
 						"name": $("#name").val()
 					},
 					function (info) {
+						cutPage(1);
 						layer.closeAll();
 					}
 			);

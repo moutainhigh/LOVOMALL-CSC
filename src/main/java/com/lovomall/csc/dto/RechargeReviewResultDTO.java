@@ -1,7 +1,11 @@
 package com.lovomall.csc.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -12,7 +16,10 @@ import java.time.LocalDate;
  * Version: 1.0
  */
 @Setter
-public class RechargeReviewResultDTO {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+public class RechargeReviewResultDTO implements Serializable {
     private String upId;
     private String userId;
     private double discountLevel;
@@ -20,5 +27,5 @@ public class RechargeReviewResultDTO {
     private double currentBalance;
     private String reviewResult;
     private String reviewAdvice;
-    private LocalDate reviewDate = LocalDate.now();
+    private String reviewDate = LocalDate.now().toString();
 }

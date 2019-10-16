@@ -92,10 +92,10 @@ public class RechargeRecordController {
         resultDTO.setReviewResult("通过");
 
         // 根据余额记录累计充值金查询对应折扣率
-        double discountPer = discountLevelRepository.findDiscountPerByAccuMoney(
-                rechargeRecord.getBalance().getAccuMoney());
+//        double discountPer = discountLevelRepository.findDiscountPerByAccuMoney(
+//                rechargeRecord.getBalance().getAccuMoney());
 
-        resultDTO.setDiscountLevel(discountPer);
+        resultDTO.setDiscountLevel(0.6);
         ObjectMapper mapper = new ObjectMapper();
         String jsonString;
         try {
