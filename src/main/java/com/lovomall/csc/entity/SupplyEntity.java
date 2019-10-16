@@ -16,8 +16,6 @@ import javax.persistence.*;
 @Table(name = "t_supply")
 public class SupplyEntity {
     @Id
-    @GenericGenerator(name = "sluuid",strategy = "uuid")
-    @GeneratedValue(generator = "sluuid")
     @Column(length = 32,name = "sl_id")
     private String deliveryOrderNum;
     //送货地址
