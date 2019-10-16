@@ -1,4 +1,4 @@
-package com.lovomall.csc.service.Impl;
+package com.lovomall.csc.service.impl;
 
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -133,7 +133,7 @@ public class ShoppingServiceImpl implements IShoppingService {
         supplyEntity.setOrderStatus(orderStatus);
         supplyEntity.setPhone(phone);
         supplyEntity.setPayStatus(payStatus);
-        supplyEntity.setTotalPrice(Double.valueOf(totalPrice));
+        supplyEntity.setTotalPrice(Double.parseDouble(totalPrice));
         SupplyEntity save = supplyRepository.save(supplyEntity);
         SupplierdetailsEntity supplierdetailsEntity=new SupplierdetailsEntity();
         supplierdetailsEntity.setProductCode(productCode);
@@ -142,8 +142,8 @@ public class ShoppingServiceImpl implements IShoppingService {
         supplierdetailsEntity.setBusinessName(businessName);
         supplierdetailsEntity.setProductName(productName);
         supplierdetailsEntity.setProductSpec(productSpec);
-        supplierdetailsEntity.setProductNumber(Integer.valueOf(productNumber));
-        supplierdetailsEntity.setPurchasePrice(Double.valueOf(purchasePrice));
+        supplierdetailsEntity.setProductNumber(Integer.parseInt(productNumber));
+        supplierdetailsEntity.setPurchasePrice(Double.parseDouble(purchasePrice));
         supplierdetalisRepository.save(supplierdetailsEntity);
 
         System.out.println(supplierdetailsEntity.getProductSpec());

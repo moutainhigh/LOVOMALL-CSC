@@ -1,9 +1,11 @@
-package com.lovomall.csc.service.Impl;
+package com.lovomall.csc.service.impl;
+
 import com.lovomall.csc.entity.PriceReviewResult;
 import com.lovomall.csc.repository.PriceReviewResultRepository;
 import com.lovomall.csc.service.IPriceReviewResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 
 /**

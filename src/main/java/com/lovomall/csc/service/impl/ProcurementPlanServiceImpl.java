@@ -1,4 +1,4 @@
-package com.lovomall.csc.service.Impl;
+package com.lovomall.csc.service.impl;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lovomall.csc.dao.IProcurementPlanDao;

@@ -1,4 +1,5 @@
-package com.lovomall.csc.service.Impl;
+package com.lovomall.csc.service.impl;
+
 import com.lovomall.csc.entity.PriceReview;
 import com.lovomall.csc.entity.PriceReviewResult;
 import com.lovomall.csc.repository.PriceReviewRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import javax.transaction.Transactional;
 import java.util.List;
 

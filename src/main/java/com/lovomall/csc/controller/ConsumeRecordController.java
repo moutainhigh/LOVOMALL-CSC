@@ -50,7 +50,6 @@ public class ConsumeRecordController {
         this.jmsMessagingTemplate = jmsMessagingTemplate;
         this.shoppingReviewResultQueue = shoppingReviewResultQueue;
         this.precisionMQService = precisionMQService;
-
         this.consumeRecordService = consumeRecordService;
         this.consumeReviewRecordService = consumeReviewRecordService;
         this.balanceService = balanceService;

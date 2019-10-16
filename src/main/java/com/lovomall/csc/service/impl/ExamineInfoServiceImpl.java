@@ -1,4 +1,4 @@
-package com.lovomall.csc.service.Impl;
+package com.lovomall.csc.service.impl;
 
 import com.lovomall.csc.dao.IExamineInfoDao;
 import com.lovomall.csc.entity.ExamineInfoEntity;
